@@ -1,16 +1,15 @@
-package io.husaynhakeem.mlkit_sample.core.features
+package io.husaynhakeem.mlkit_sample.core.api
 
-import android.util.Log
 import com.google.android.gms.tasks.Task
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFace
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions.*
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceLandmark
+import io.husaynhakeem.mlkit_sample.core.visionimage.BitmapVisionImageGenerator
 
 
-class FaceDetector : MLKitFeature<FirebaseVisionFaceDetector, List<FirebaseVisionFace>>() {
+class FaceDetector : MLKitApi<FirebaseVisionFaceDetector, List<FirebaseVisionFace>>() {
 
     override val processor: FirebaseVisionFaceDetector
         get() = firebaseVisionInstance.getVisionFaceDetector(
@@ -21,43 +20,40 @@ class FaceDetector : MLKitFeature<FirebaseVisionFaceDetector, List<FirebaseVisio
                         .setTrackingEnabled(true)
                         .build())
 
-    override fun process(image: FirebaseVisionImage): Task<List<FirebaseVisionFace>> {
-        return processor.detectInImage(image)
+    override fun detectInImage(image: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit): Task<List<FirebaseVisionFace>> {
+        return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: List<FirebaseVisionFace>) {
+    override fun onProcessSuccess(result: List<FirebaseVisionFace>) = with(StringBuilder()) {
         result.forEach {
-            Log.d(TAG, "Head id: ${it.trackingId}")
+            append("Head id: ${it.trackingId}")
 
             val bounds = it.boundingBox
             val rotY = it.headEulerAngleY
             val rotZ = it.headEulerAngleZ
 
-            Log.d(TAG, "Head is rotated to the right $rotY degrees")
-            Log.d(TAG, "Head is tilted sideawys $rotZ degrees")
+            append("Head is rotated to the right $rotY degrees")
+            append("Head is tilted sideawys $rotZ degrees")
 
-            Log.d(TAG, "Smiling probability ${it.smilingProbability}")
-            Log.d(TAG, "Right eye open probablity ${it.rightEyeOpenProbability}")
-            Log.d(TAG, "Left eye open probablity ${it.leftEyeOpenProbability}")
+            append("Smiling probability ${it.smilingProbability}")
+            append("Right eye open probablity ${it.rightEyeOpenProbability}")
+            append("Left eye open probablity ${it.leftEyeOpenProbability}")
 
             val rightEar = it.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EAR)
             val leftEar = it.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR)
 
             rightEar?.position?.let {
-                Log.d(TAG, "Right ear (${it.x}, ${it.y}, ${it.z})")
+                append("Right ear (${it.x}, ${it.y}, ${it.z})")
             }
 
             leftEar?.position?.let {
-                Log.d(TAG, "Right ear (${it.x}, ${it.y}, ${it.z})")
+                append("Right ear (${it.x}, ${it.y}, ${it.z})")
             }
         }
+        toString()
     }
 
-    override fun onProcessFailure(exception: Exception) {
-        Log.e(TAG, "Failed to detect faces in the image\nCause: ${exception.message}")
-    }
-
-    companion object {
-        private val TAG = FaceDetector::class.java.simpleName
+    override fun onProcessFailure(exception: Exception): String {
+        return "Failed to detect faces in the image\nCause: ${exception.message}"
     }
 }

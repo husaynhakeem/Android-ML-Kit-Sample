@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Android-MLkit-Sample</string>
+    <string name="new_image_title" />
+    <string name="new_image_body">Choose a new image</string>
+    <string name="barcode_detector_title">Barcode Detector</string>
+    <string name="barcode_detector_body" />
+    <string name="face_detector_title">Face detector</string>
+    <string name="face_detector_body" />
+    <string name="image_labeler_title">Image Labeler</string>
+    <string name="image_labeler_body" />
+    <string name="landmark_detector_title">Landmark Detector</string>
+    <string name="landmark_detector_body" />
+    <string name="text_detector_title">Text Detector</string>
+    <string name="text_detector_body" />
 </resources>

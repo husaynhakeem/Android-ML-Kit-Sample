@@ -4,4 +4,35 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" />
+    tools:context=".ui.MainActivity">
+
+    <ImageView
+        android:id="@+id/selectedImageImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ef_black_alpha_50" />
+
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ef_padding_medium"
+        android:textColor="@color/ef_white"
+        android:textSize="@dimen/ef_font_medium"
+        tools:text="Results" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userOptionsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:scrollbars="none" />
+
+</FrameLayout>

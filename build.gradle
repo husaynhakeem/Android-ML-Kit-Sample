@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0-alpha14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:3.3.1'
     }
 }
 
@@ -29,6 +30,7 @@ ext {
     constraintLayoutVersion = '1.1.0'
     firebaseCoreVersion = '15.0.2'
     firebaseMLKitVersion = '15.0.0'
-    imagePickerVersion = '1.12.0'
     navigationVersion = '1.0.0-alpha01'
+    materialVersion = '1.0.0-alpha1'
+    imagePickerVersion = '1.12.0'
 }
