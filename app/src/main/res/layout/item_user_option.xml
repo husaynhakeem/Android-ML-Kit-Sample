@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/userOptionImageView"
     android:layout_width="@dimen/user_option_imageview_size"
     android:layout_height="@dimen/user_option_imageview_size"
     android:layout_margin="@dimen/ef_margin_large"
-    tools:ignore="ContentDescription" />
+    android:background="@drawable/white_disc"
+    android:padding="@dimen/user_option_container_padding">
+
+    <ImageView
+        android:id="@+id/userOptionImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="ContentDescription" />
+
+</FrameLayout>

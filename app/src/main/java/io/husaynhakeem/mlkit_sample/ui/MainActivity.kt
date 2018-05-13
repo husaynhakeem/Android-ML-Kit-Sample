@@ -5,10 +5,11 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.esafirm.imagepicker.features.ImagePicker
 import io.husaynhakeem.mlkit_sample.R
 import io.husaynhakeem.mlkit_sample.core.model.UserOption
+import io.husaynhakeem.mlkit_sample.core.ui.CenteredHorizontalLayoutManager
 import io.husaynhakeem.mlkit_sample.ui.dialog.ImagePickerDialog
 import io.husaynhakeem.mlkit_sample.ui.dialog.MLKitApiAboutDialog
 import io.husaynhakeem.mlkit_sample.ui.useroptions.UserOptionViewHolder
@@ -35,7 +36,8 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
     //======================================================
     override fun setUpUserOptionsList(options: Array<UserOption>) {
         with(userOptionsRecyclerView) {
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = CenteredHorizontalLayoutManager(this@MainActivity)
+            LinearSnapHelper().attachToRecyclerView(this)
             setHasFixedSize(true)
             adapter = UserOptionsAdapter(this@MainActivity, options)
         }
