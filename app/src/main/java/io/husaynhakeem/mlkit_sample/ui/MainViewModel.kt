@@ -19,19 +19,27 @@ class MainViewModel : ViewModel() {
         }
 
     var imagePath: String = ""
+        set(value) {
+            field = value
+            onUserOptionSelected(UserOptionsRepository.firstMLKitApiOption)
+        }
 
     fun onUserOptionSelected(option: UserOption) {
         when (option) {
             is NewImageOption -> view?.showImagePicker()
-            is MLKitApiOption -> MLkitApiFactory.get(option.type).process(
-                    imagePath,
-                    { view?.printResult(it) },
-                    { view?.printError(it) })
+            is MLKitApiOption -> {
+                showMLKitApiDefinition(option)
+                MLkitApiFactory.get(option.type).process(
+                        imagePath,
+                        { view?.printResult(it) },
+                        { view?.printError(it) })
+            }
         }
     }
 
-    fun onImageSelected(imagePath: String) {
-        this.imagePath = imagePath
-        onUserOptionSelected(UserOptionsRepository.firstMLKitApiOption)
+    private fun showMLKitApiDefinition(option: MLKitApiOption) {
+        if (MLKitApiDefinitionHandler.shouldShowMLKitApiOptionDefinition(option)) {
+            view?.showMLKitApiDefinitionDialog(option.iconResId, option.title, option.body)
+        }
     }
 }

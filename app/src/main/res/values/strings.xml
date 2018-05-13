@@ -1,15 +1,28 @@
 <resources>
     <string name="app_name">Android-MLkit-Sample</string>
+    <string name="preferences_file">mlkit_preferences</string>
+
+    <string name="image_picker_dialog_title">Select an image</string>
+    <string name="image_picker_dialog_message">Select an image using the</string>
+    <string name="image_picker_dialog_button_camera">Camera</string>
+    <string name="image_picker_dialog_button_gallery">Gallery</string>
+    <string name="definition_dialog_button_label">Got it!</string>
+
     <string name="new_image_title" />
     <string name="new_image_body">Choose a new image</string>
+
     <string name="barcode_detector_title">Barcode Detector</string>
-    <string name="barcode_detector_body" />
+    <string name="barcode_detector_body">With ML Kit\'s barcode scanning API, you can read data encoded using most standard barcode formats.</string>
+
     <string name="face_detector_title">Face detector</string>
-    <string name="face_detector_body" />
+    <string name="face_detector_body">With ML Kit\'s face detection API, you can detect faces in an image and identify key facial features.</string>
+
     <string name="image_labeler_title">Image Labeler</string>
-    <string name="image_labeler_body" />
+    <string name="image_labeler_body">With ML Kit\'s image labeling APIs, you can recognize entities in an image without having to provide any additional contextual metadata, using either an on-device API or a cloud-based API.</string>
+
     <string name="landmark_detector_title">Landmark Detector</string>
-    <string name="landmark_detector_body" />
+    <string name="landmark_detector_body">With ML Kit\'s landmark recognition API, you can recognize well-known landmarks in an image.</string>
+
     <string name="text_detector_title">Text Detector</string>
-    <string name="text_detector_body" />
+    <string name="text_detector_body">With ML Kit\'s text recognition APIs, you can recognize text in any Latin-based language (and more, with Cloud-based text recognition).</string>
 </resources>
