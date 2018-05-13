@@ -1,7 +1,7 @@
 package io.husaynhakeem.mlkit_sample.core.api
 
-import io.husaynhakeem.mlkit_sample.ui.data.MLKitApiType
-import io.husaynhakeem.mlkit_sample.ui.data.MLKitApiType.*
+import io.husaynhakeem.mlkit_sample.core.model.MLKitApiType
+import io.husaynhakeem.mlkit_sample.core.model.MLKitApiType.*
 import java.util.*
 
 

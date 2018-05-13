@@ -24,7 +24,7 @@ class FaceDetector : MLKitApi<FirebaseVisionFaceDetector, List<FirebaseVisionFac
         return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: List<FirebaseVisionFace>) = with(StringBuilder()) {
+    override fun onDetectionSuccess(result: List<FirebaseVisionFace>) = with(StringBuilder()) {
         result.forEach {
             append("Head id: ${it.trackingId}")
 
@@ -53,7 +53,7 @@ class FaceDetector : MLKitApi<FirebaseVisionFaceDetector, List<FirebaseVisionFac
         toString()
     }
 
-    override fun onProcessFailure(exception: Exception): String {
+    override fun onDetectionFailure(exception: Exception): String {
         return "Failed to detect faces in the image\nCause: ${exception.message}"
     }
 }

@@ -1,10 +1,10 @@
-package io.husaynhakeem.mlkit_sample.ui
+package io.husaynhakeem.mlkit_sample.ui.useroptions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.husaynhakeem.mlkit_sample.R
-import io.husaynhakeem.mlkit_sample.ui.data.UserOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 import kotlinx.android.synthetic.main.item_user_option.view.*
 
 class UserOptionViewHolder(private val listener: Listener, parent: ViewGroup) :

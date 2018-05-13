@@ -1,4 +1,4 @@
-package io.husaynhakeem.mlkit_sample.ui.data
+package io.husaynhakeem.mlkit_sample.core.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

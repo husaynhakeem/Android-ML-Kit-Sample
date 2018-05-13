@@ -15,7 +15,7 @@ class TextDetector : MLKitApi<FirebaseVisionTextDetector, FirebaseVisionText>() 
         return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: FirebaseVisionText): String {
+    override fun onDetectionSuccess(result: FirebaseVisionText): String {
         return recognizedTextAsBlocks(result)
     }
 
@@ -37,7 +37,7 @@ class TextDetector : MLKitApi<FirebaseVisionTextDetector, FirebaseVisionText>() 
         toString()
     }
 
-    override fun onProcessFailure(exception: Exception): String {
+    override fun onDetectionFailure(exception: Exception): String {
         return "Failed to detect text in the image\nCause: ${exception.message}"
     }
 }

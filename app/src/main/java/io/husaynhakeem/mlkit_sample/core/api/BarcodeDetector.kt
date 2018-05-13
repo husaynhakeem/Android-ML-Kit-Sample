@@ -16,7 +16,7 @@ class BarcodeDetector : MLKitApi<FirebaseVisionBarcodeDetector, List<FirebaseVis
         return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: List<FirebaseVisionBarcode>) = with(StringBuilder()) {
+    override fun onDetectionSuccess(result: List<FirebaseVisionBarcode>) = with(StringBuilder()) {
         result.forEach {
             append("Barcode raw value: ${it.rawValue}")
             append("Barcode display value: ${it.displayValue}")
@@ -125,7 +125,7 @@ class BarcodeDetector : MLKitApi<FirebaseVisionBarcodeDetector, List<FirebaseVis
         }
     }
 
-    override fun onProcessFailure(exception: Exception): String {
+    override fun onDetectionFailure(exception: Exception): String {
         return "Failed to read barcode\nCause: ${exception.message}"
     }
 }

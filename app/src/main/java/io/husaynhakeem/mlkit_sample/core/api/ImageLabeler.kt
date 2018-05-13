@@ -19,7 +19,7 @@ class ImageLabeler : MLKitApi<FirebaseVisionLabelDetector, List<FirebaseVisionLa
         return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: List<FirebaseVisionLabel>) = with(StringBuilder()) {
+    override fun onDetectionSuccess(result: List<FirebaseVisionLabel>) = with(StringBuilder()) {
         result.forEach {
             val label = it.label
             val confidenceProbability = it.confidence * 100
@@ -28,7 +28,7 @@ class ImageLabeler : MLKitApi<FirebaseVisionLabelDetector, List<FirebaseVisionLa
         toString()
     }
 
-    override fun onProcessFailure(exception: Exception): String {
+    override fun onDetectionFailure(exception: Exception): String {
         return "Failed to detect objects in the image\nCause: ${exception.message}"
     }
 }

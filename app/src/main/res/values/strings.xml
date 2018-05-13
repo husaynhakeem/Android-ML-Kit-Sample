@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android-MLkit-Sample</string>
+    <string name="app_name">Machine Learning Kit - Sample</string>
     <string name="preferences_file">mlkit_preferences</string>
 
     <string name="image_picker_dialog_title">Select an image</string>

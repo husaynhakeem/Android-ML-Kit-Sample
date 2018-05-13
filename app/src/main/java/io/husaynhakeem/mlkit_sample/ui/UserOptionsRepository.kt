@@ -1,7 +1,10 @@
-package io.husaynhakeem.mlkit_sample.ui.data
+package io.husaynhakeem.mlkit_sample.ui
 
 import io.husaynhakeem.mlkit_sample.R
-import io.husaynhakeem.mlkit_sample.ui.data.MLKitApiType.*
+import io.husaynhakeem.mlkit_sample.core.model.MLKitApiOption
+import io.husaynhakeem.mlkit_sample.core.model.MLKitApiType.*
+import io.husaynhakeem.mlkit_sample.core.model.NewImageOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 
 
 object UserOptionsRepository {

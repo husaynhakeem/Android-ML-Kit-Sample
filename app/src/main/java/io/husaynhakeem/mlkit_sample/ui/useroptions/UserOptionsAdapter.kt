@@ -1,8 +1,8 @@
-package io.husaynhakeem.mlkit_sample.ui
+package io.husaynhakeem.mlkit_sample.ui.useroptions
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.husaynhakeem.mlkit_sample.ui.data.UserOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 
 class UserOptionsAdapter(
         private val listener: UserOptionViewHolder.Listener,

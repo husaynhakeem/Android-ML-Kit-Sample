@@ -2,10 +2,9 @@ package io.husaynhakeem.mlkit_sample.ui
 
 import androidx.lifecycle.ViewModel
 import io.husaynhakeem.mlkit_sample.core.api.MLkitApiFactory
-import io.husaynhakeem.mlkit_sample.ui.data.MLKitApiOption
-import io.husaynhakeem.mlkit_sample.ui.data.NewImageOption
-import io.husaynhakeem.mlkit_sample.ui.data.UserOption
-import io.husaynhakeem.mlkit_sample.ui.data.UserOptionsRepository
+import io.husaynhakeem.mlkit_sample.core.model.MLKitApiOption
+import io.husaynhakeem.mlkit_sample.core.model.NewImageOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 
 class MainViewModel : ViewModel() {
 
@@ -15,19 +14,25 @@ class MainViewModel : ViewModel() {
             field?.setUpUserOptionsList(UserOptionsRepository.options)
             if (imagePath.isBlank()) {
                 field?.showImagePicker()
+            } else {
+                field?.showSelectedImage(imagePath)
             }
         }
 
     var imagePath: String = ""
         set(value) {
             field = value
-            onUserOptionSelected(UserOptionsRepository.firstMLKitApiOption)
+            view?.showSelectedImage(imagePath)
+            onUserOptionSelected(mostRecentlyUsedMLKitApiOption)
         }
+
+    var mostRecentlyUsedMLKitApiOption = UserOptionsRepository.firstMLKitApiOption
 
     fun onUserOptionSelected(option: UserOption) {
         when (option) {
             is NewImageOption -> view?.showImagePicker()
             is MLKitApiOption -> {
+                mostRecentlyUsedMLKitApiOption = option
                 showMLKitApiDefinition(option)
                 MLkitApiFactory.get(option.type).process(
                         imagePath,
@@ -38,8 +43,8 @@ class MainViewModel : ViewModel() {
     }
 
     private fun showMLKitApiDefinition(option: MLKitApiOption) {
-        if (MLKitApiDefinitionHandler.shouldShowMLKitApiOptionDefinition(option)) {
-            view?.showMLKitApiDefinitionDialog(option.iconResId, option.title, option.body)
+        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(option)) {
+            view?.showMLKitApiAboutDialog(option.iconResId, option.title, option.body)
         }
     }
 }

@@ -12,13 +12,13 @@ abstract class MLKitApi<P, T> {
 
     protected abstract fun detectInImage(image: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit): Task<T>
 
-    protected abstract fun onProcessSuccess(result: T): String
+    protected abstract fun onDetectionSuccess(result: T): String
 
-    protected abstract fun onProcessFailure(exception: Exception): String
+    protected abstract fun onDetectionFailure(exception: Exception): String
 
     fun process(image: String, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
         detectInImage(image, onSuccess, onFailure)
-                .addOnSuccessListener { onSuccess(onProcessSuccess(it)) }
-                .addOnFailureListener { onFailure(onProcessFailure(it)) }
+                .addOnSuccessListener { onSuccess(onDetectionSuccess(it)) }
+                .addOnFailureListener { onFailure(onDetectionFailure(it)) }
     }
 }

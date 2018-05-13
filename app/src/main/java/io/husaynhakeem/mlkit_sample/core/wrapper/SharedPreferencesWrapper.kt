@@ -1,11 +1,11 @@
-package io.husaynhakeem.mlkit_sample.core.agent
+package io.husaynhakeem.mlkit_sample.core.wrapper
 
 import android.content.Context.MODE_PRIVATE
 import io.husaynhakeem.mlkit_sample.MLKitApplication
 import io.husaynhakeem.mlkit_sample.R
 
 
-object SharedPreferencesAgent {
+object SharedPreferencesWrapper {
 
     private val preferences by lazy {
         with(MLKitApplication.instance.applicationContext) {

@@ -2,7 +2,7 @@ package io.husaynhakeem.mlkit_sample.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import io.husaynhakeem.mlkit_sample.ui.data.UserOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 
 interface MainView {
 
@@ -14,5 +14,7 @@ interface MainView {
 
     fun printError(error: String)
 
-    fun showMLKitApiDefinitionDialog(@DrawableRes iconResId: Int, @StringRes title: Int, @StringRes body: Int)
+    fun showMLKitApiAboutDialog(@DrawableRes iconResId: Int, @StringRes title: Int, @StringRes body: Int)
+
+    fun showSelectedImage(imagePath: String)
 }

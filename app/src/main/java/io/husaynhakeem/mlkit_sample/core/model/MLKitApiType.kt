@@ -1,4 +1,4 @@
-package io.husaynhakeem.mlkit_sample.ui.data
+package io.husaynhakeem.mlkit_sample.core.model
 
 
 enum class MLKitApiType {

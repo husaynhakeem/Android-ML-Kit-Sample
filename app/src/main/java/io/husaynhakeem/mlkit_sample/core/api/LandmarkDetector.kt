@@ -21,7 +21,7 @@ class LandmarkDetector : MLKitApi<FirebaseVisionCloudLandmarkDetector, List<Fire
         return processor.detectInImage(BitmapVisionImageGenerator(image).get())
     }
 
-    override fun onProcessSuccess(result: List<FirebaseVisionCloudLandmark>) = with(StringBuilder()) {
+    override fun onDetectionSuccess(result: List<FirebaseVisionCloudLandmark>) = with(StringBuilder()) {
         result.forEach {
             append("Landmark id: ${it.entityId}")
 
@@ -38,7 +38,7 @@ class LandmarkDetector : MLKitApi<FirebaseVisionCloudLandmarkDetector, List<Fire
         toString()
     }
 
-    override fun onProcessFailure(exception: Exception): String {
+    override fun onDetectionFailure(exception: Exception): String {
         return "Failed to detect landmarks in the image\nCause: ${exception.message}"
     }
 }

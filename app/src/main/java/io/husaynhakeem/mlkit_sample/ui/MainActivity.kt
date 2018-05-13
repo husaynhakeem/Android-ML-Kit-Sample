@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.esafirm.imagepicker.features.ImagePicker
 import io.husaynhakeem.mlkit_sample.R
-import io.husaynhakeem.mlkit_sample.ui.data.UserOption
+import io.husaynhakeem.mlkit_sample.core.model.UserOption
 import io.husaynhakeem.mlkit_sample.ui.dialog.ImagePickerDialog
-import io.husaynhakeem.mlkit_sample.ui.dialog.MLKitApiDefinitionDialog
+import io.husaynhakeem.mlkit_sample.ui.dialog.MLKitApiAboutDialog
+import io.husaynhakeem.mlkit_sample.ui.useroptions.UserOptionViewHolder
+import io.husaynhakeem.mlkit_sample.ui.useroptions.UserOptionsAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listener, ImagePickerDialog.Listener {
@@ -48,10 +50,13 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             val image = ImagePicker.getFirstImageOrNull(data)
             if (image != null) {
-                selectedImageImageView.setImageBitmap(BitmapFactory.decodeFile(image.path))
                 viewModel.imagePath = image.path
             }
         }
+    }
+
+    override fun showSelectedImage(imagePath: String) {
+        selectedImageImageView.setImageBitmap(BitmapFactory.decodeFile(imagePath))
     }
 
     override fun printResult(result: String) {
@@ -62,13 +67,13 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
         resultTextView.text = error
     }
 
-    override fun showMLKitApiDefinitionDialog(iconResId: Int, title: Int, body: Int) {
-        with(MLKitApiDefinitionDialog()) {
+    override fun showMLKitApiAboutDialog(iconResId: Int, title: Int, body: Int) {
+        with(MLKitApiAboutDialog()) {
             val bundle = Bundle()
-            bundle.putInt(MLKitApiDefinitionDialog.KEY_TITLE, title)
-            bundle.putInt(MLKitApiDefinitionDialog.KEY_BODY, body)
+            bundle.putInt(MLKitApiAboutDialog.KEY_TITLE, title)
+            bundle.putInt(MLKitApiAboutDialog.KEY_BODY, body)
             arguments = bundle
-            show(supportFragmentManager, MLKitApiDefinitionDialog::class.java.simpleName)
+            show(supportFragmentManager, MLKitApiAboutDialog::class.java.simpleName)
         }
     }
     //endregion
@@ -89,7 +94,9 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
     }
 
     override fun onGallerySelected() {
-        ImagePicker.create(this).showCamera(false).start()
+        ImagePicker.create(this)
+                .showCamera(false)
+                .start()
     }
     //endregion
 }

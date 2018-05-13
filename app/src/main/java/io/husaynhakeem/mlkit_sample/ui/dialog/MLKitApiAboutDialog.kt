@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import io.husaynhakeem.mlkit_sample.R
 
 
-class MLKitApiDefinitionDialog : DialogFragment() {
+class MLKitApiAboutDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val title = arguments?.getInt(KEY_TITLE) ?: 0
