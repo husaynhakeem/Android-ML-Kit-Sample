@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
             if (imagePath.isBlank()) {
                 field?.showImagePicker()
             } else {
-                field?.showSelectedImage(imagePath)
+                populateView(field)
             }
         }
 
@@ -33,6 +33,28 @@ class MainViewModel : ViewModel() {
             processImage(field)
         }
 
+    var latestResult: String = ""
+        set(value) {
+            field = value
+            if (field.isNotEmpty())
+                latestErrorMessage = ""
+        }
+
+    var latestErrorMessage: String = ""
+        set(value) {
+            field = value
+            if (field.isNotEmpty())
+                latestResult = ""
+        }
+
+    private fun populateView(view: MainView?) {
+        view?.showSelectedImage(imagePath)
+        if (latestResult.isNotEmpty())
+            view?.printResult(latestResult)
+        if (latestErrorMessage.isNotEmpty())
+            view?.printError(latestErrorMessage)
+    }
+
     private fun showMLKitApiAboutDialog(option: MLKitApiOption) {
         if (AboutMLKitApisHandler.shouldShowAboutDialogFor(option)) {
             view?.showMLKitApiAboutDialog(option.iconResId, option.title, option.body)
@@ -45,10 +67,12 @@ class MainViewModel : ViewModel() {
             MLkitApiFactory.get(option.type).process(
                     imagePath,
                     {
+                        latestResult = it
                         view?.dismissLoader()
                         view?.printResult(it)
                     },
                     {
+                        latestErrorMessage = it
                         view?.dismissLoader()
                         view?.printError(it)
                     })
