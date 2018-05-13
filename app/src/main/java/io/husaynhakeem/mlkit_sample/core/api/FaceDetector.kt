@@ -26,34 +26,54 @@ class FaceDetector : MLKitApi<FirebaseVisionFaceDetector, List<FirebaseVisionFac
 
     override fun onDetectionSuccess(result: List<FirebaseVisionFace>) = with(StringBuilder()) {
         result.forEach {
-            append("Head id: ${it.trackingId}")
+            append("Head id: ${it.trackingId}\n")
 
             val bounds = it.boundingBox
-            val rotY = it.headEulerAngleY
-            val rotZ = it.headEulerAngleZ
+            val rotY = Math.round(it.headEulerAngleY)
+            val rotZ = Math.round(it.headEulerAngleZ)
 
-            append("Head is rotated to the right $rotY degrees")
-            append("Head is tilted sideawys $rotZ degrees")
+            append("Head is rotated to the right $rotY degrees\n")
+            append("Head is tilted sideways $rotZ degrees\n")
 
-            append("Smiling probability ${it.smilingProbability}")
-            append("Right eye open probablity ${it.rightEyeOpenProbability}")
-            append("Left eye open probablity ${it.leftEyeOpenProbability}")
+            val smilingProbability = Math.round(it.smilingProbability * 100)
+            append("Smiling probability $smilingProbability\n")
+
+            val rightEyeOpenProbability = Math.round(it.rightEyeOpenProbability * 100)
+            append("Right eye open probablity $rightEyeOpenProbability\n")
+
+            val leftEyeOpenProbability = Math.round(it.leftEyeOpenProbability * 100)
+            append("Left eye open probablity $leftEyeOpenProbability\n")
 
             val rightEar = it.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EAR)
             val leftEar = it.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR)
 
             rightEar?.position?.let {
-                append("Right ear (${it.x}, ${it.y}, ${it.z})")
+                append("Right ear (${it.x}, ${it.y}, ${it.z})\n")
             }
 
             leftEar?.position?.let {
-                append("Right ear (${it.x}, ${it.y}, ${it.z})")
+                append("Right ear (${it.x}, ${it.y}, ${it.z})\n")
             }
+
+            append("\n")
         }
-        toString()
+
+        if (this.isBlank()) {
+            return RESULT_TITLE + EMPTY_RESULT_MESSAGE
+        }
+
+        RESULT_TITLE + toString()
     }
 
     override fun onDetectionFailure(exception: Exception): String {
-        return "Failed to detect faces in the image\nCause: ${exception.message}"
+        return ERROR_MESSAGE + exception.message
+    }
+
+    companion object {
+        private const val RESULT_TITLE = "Face detection results\n\n"
+
+        private const val EMPTY_RESULT_MESSAGE = "Failed to detect faces in the provided image."
+
+        private const val ERROR_MESSAGE = "An error occurred while trying to detect faces in the provided image.\n\nCause: "
     }
 }

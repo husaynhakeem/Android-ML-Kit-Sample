@@ -17,4 +17,8 @@ interface MainView {
     fun showMLKitApiAboutDialog(@DrawableRes iconResId: Int, @StringRes title: Int, @StringRes body: Int)
 
     fun showSelectedImage(imagePath: String)
+
+    fun showLoader()
+
+    fun dismissLoader()
 }

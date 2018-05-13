@@ -35,10 +35,23 @@ class LandmarkDetector : MLKitApi<FirebaseVisionCloudLandmarkDetector, List<Fire
                 append("Location(${it.latitude}, ${it.longitude})")
             }
         }
-        toString()
+
+        if (this.isBlank()) {
+            return RESULT_TITLE + EMPTY_RESULT_MESSAGE
+        }
+
+        RESULT_TITLE + toString()
     }
 
     override fun onDetectionFailure(exception: Exception): String {
-        return "Failed to detect landmarks in the image\nCause: ${exception.message}"
+        return ERROR_MESSAGE + exception.message
+    }
+
+    companion object {
+        private const val RESULT_TITLE = "Landmark detection results\n\n"
+
+        private const val EMPTY_RESULT_MESSAGE = "Failed to detect landmarks in the provided image."
+
+        private const val ERROR_MESSAGE = "An error occurred while trying to detect landmarks in the provided image.\n\nCause: "
     }
 }

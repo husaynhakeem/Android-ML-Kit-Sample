@@ -18,114 +18,138 @@ class BarcodeDetector : MLKitApi<FirebaseVisionBarcodeDetector, List<FirebaseVis
 
     override fun onDetectionSuccess(result: List<FirebaseVisionBarcode>) = with(StringBuilder()) {
         result.forEach {
-            append("Barcode raw value: ${it.rawValue}")
-            append("Barcode display value: ${it.displayValue}")
-            append("Barcode format: ${it.format}")
+            append("Barcode raw value: ${it.rawValue}\n")
+            append("Barcode display value: ${it.displayValue}\n")
+            append("Barcode format: ${it.format}\n")
 
             when (it.valueType) {
-                TYPE_WIFI -> onBarcodeOfTypeWifi(this, it.wifi)
-                TYPE_CALENDAR_EVENT -> onBarcodeOfTypeCalendarEvent(this, it.calendarEvent)
-                TYPE_CONTACT_INFO -> onBarcodeOfTypeContactInfo(this, it.contactInfo)
-                TYPE_DRIVER_LICENSE -> onBarcodeOfTypeDriverLicense(this, it.driverLicense)
-                TYPE_EMAIL -> onBarcodeOfTypeEmail(this, it.email)
-                TYPE_GEO -> onBarcodeOfTypeGeoPoint(this, it.geoPoint)
-                TYPE_PHONE -> onBarcodeOfTypePhone(this, it.phone)
-                TYPE_SMS -> onBarcodeOfTypeSms(this, it.sms)
-                TYPE_URL -> onBarcodeOfTypeUrl(this, it.url)
+                TYPE_WIFI -> append(onBarcodeOfTypeWifi(it.wifi))
+                TYPE_CALENDAR_EVENT -> append(onBarcodeOfTypeCalendarEvent(it.calendarEvent))
+                TYPE_CONTACT_INFO -> append(onBarcodeOfTypeContactInfo(it.contactInfo))
+                TYPE_DRIVER_LICENSE -> append(onBarcodeOfTypeDriverLicense(it.driverLicense))
+                TYPE_EMAIL -> append(onBarcodeOfTypeEmail(it.email))
+                TYPE_GEO -> append(onBarcodeOfTypeGeoPoint(it.geoPoint))
+                TYPE_PHONE -> append(onBarcodeOfTypePhone(it.phone))
+                TYPE_SMS -> append(onBarcodeOfTypeSms(it.sms))
+                TYPE_URL -> append(onBarcodeOfTypeUrl(it.url))
                 TYPE_TEXT -> append("Barcode of type text")
                 TYPE_PRODUCT -> append("Barcode of type product")
                 TYPE_ISBN -> append("Barcode of type isbn")
                 TYPE_UNKNOWN -> append("Barcode of unknown type")
             }
         }
+
+        if (this.isBlank()) {
+            return RESULT_TITLE + EMPTY_RESULT_MESSAGE
+        }
+
+        RESULT_TITLE + toString()
+    }
+
+    private fun onBarcodeOfTypeWifi(wifi: WiFi?): String = with(StringBuilder()) {
+        append("Barcode of type wifi\n")
+        wifi?.let {
+            append("Password: ${it.password}\n")
+            append("Encryption type: ${it.encryptionType}\n")
+            append("Ssid: ${it.ssid}\n")
+        }
         toString()
     }
 
-    private fun onBarcodeOfTypeWifi(sb: StringBuilder, wifi: WiFi?) {
-        sb.append("Barcode of type wifi")
-        wifi?.let {
-            sb.append("Password: ${it.password}, encryption type: ${it.encryptionType}, ssid: ${it.ssid}")
-        }
-    }
-
-    private fun onBarcodeOfTypeCalendarEvent(sb: StringBuilder, calendarEvent: CalendarEvent?) {
-        sb.append("Barcode of type calendar event")
+    private fun onBarcodeOfTypeCalendarEvent(calendarEvent: CalendarEvent?): String = with(StringBuilder()) {
+        append("Barcode of type calendar event\n")
         calendarEvent?.let {
-            sb.append("Organizer: ${it.organizer}")
-            sb.append("Summary: ${it.summary}")
-            sb.append("Location: ${it.location}")
-            sb.append("Description: ${it.description}")
-            sb.append("Status: ${it.status}")
-            sb.append("Starts ${it.start} and ends ${it.end}")
+            append("Organizer: ${it.organizer}\n")
+            append("Summary: ${it.summary}\n")
+            append("Location: ${it.location}\n")
+            append("Description: ${it.description}\n")
+            append("Status: ${it.status}\n")
+            append("Starts ${it.start} and ends ${it.end}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeContactInfo(sb: StringBuilder, contactInfo: ContactInfo?) {
-        sb.append("Barcode of type contact info")
+    private fun onBarcodeOfTypeContactInfo(contactInfo: ContactInfo?): String = with(StringBuilder()) {
+        append("Barcode of type contact info\n")
         contactInfo?.let {
-            sb.append("Name: ${it.name}")
-            sb.append("Title: ${it.title}")
-            sb.append("Organization: ${it.organization}")
-            sb.append("Emails: ${it.emails}")
-            sb.append("Addresses: ${it.addresses}")
-            sb.append("Phones: ${it.phones}")
-            sb.append("Urls: ${it.urls}")
+            append("Name: ${it.name}\n")
+            append("Title: ${it.title}\n")
+            append("Organization: ${it.organization}\n")
+            append("Emails: ${it.emails}\n")
+            append("Addresses: ${it.addresses}\n")
+            append("Phones: ${it.phones}\n")
+            append("Urls: ${it.urls}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeDriverLicense(sb: StringBuilder, driverLicense: DriverLicense?) {
-        sb.append("Barcode of type driver license")
+    private fun onBarcodeOfTypeDriverLicense(driverLicense: DriverLicense?): String = with(StringBuilder()) {
+        append("Barcode of type driver license\n")
         driverLicense?.let {
-            sb.append("Full name: ${it.firstName} ${it.middleName} ${it.lastName}")
-            sb.append("Gender: ${it.gender}")
-            sb.append("Born: ${it.birthDate}")
-            sb.append("Issued: ${it.issueDate}, expires ${it.expiryDate}")
-            sb.append("Address: ${it.addressStreet}, ${it.addressCity}, ${it.addressState}, ${it.addressZip}")
+            append("Full name: ${it.firstName} ${it.middleName} ${it.lastName}\n")
+            append("Gender: ${it.gender}\n")
+            append("Born: ${it.birthDate}\n")
+            append("Issued: ${it.issueDate}, expires ${it.expiryDate}\n")
+            append("Address: ${it.addressStreet}, ${it.addressCity}, ${it.addressState}, ${it.addressZip}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeEmail(sb: StringBuilder, email: Email?) {
-        sb.append("Barcode of type email")
+    private fun onBarcodeOfTypeEmail(email: Email?): String = with(StringBuilder()) {
+        append("Barcode of type email\n")
         email?.let {
-            sb.append("Addressed to ${it.address}")
-            sb.append("Subject: ${it.subject}")
-            sb.append("Type: ${it.type}")
-            sb.append("Body: ${it.body}")
+            append("Addressed to ${it.address}\n")
+            append("Subject: ${it.subject}\n")
+            append("Type: ${it.type}\n")
+            append("Body: ${it.body}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeGeoPoint(sb: StringBuilder, geoPoint: GeoPoint?) {
-        sb.append("Barcode of type geoPoint")
+    private fun onBarcodeOfTypeGeoPoint(geoPoint: GeoPoint?): String = with(StringBuilder()) {
+        append("Barcode of type geoPoint\n")
         geoPoint?.let {
-            sb.append("Coordinates(${it.lat}, ${it.lng})")
+            append("Coordinates(${it.lat}, ${it.lng})\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypePhone(sb: StringBuilder, phone: Phone?) {
-        sb.append("Barcode of type phone")
+    private fun onBarcodeOfTypePhone(phone: Phone?): String = with(StringBuilder()) {
+        append("Barcode of type phone\n")
         phone?.let {
-            sb.append("Type: ${it.type}")
-            sb.append("Number: ${it.number}")
+            append("Type: ${it.type}\n")
+            append("Number: ${it.number}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeSms(sb: StringBuilder, sms: Sms?) {
-        sb.append("Barcode of type sms")
+    private fun onBarcodeOfTypeSms(sms: Sms?): String = with(StringBuilder()) {
+        append("Barcode of type sms\n")
         sms?.let {
-            sb.append("Phone number: ${it.phoneNumber}")
-            sb.append("Message: ${it.message}")
+            append("Phone number: ${it.phoneNumber}\n")
+            append("Message: ${it.message}\n")
         }
+        toString()
     }
 
-    private fun onBarcodeOfTypeUrl(sb: StringBuilder, url: UrlBookmark?) {
-        sb.append("Barcode of type url")
+    private fun onBarcodeOfTypeUrl(url: UrlBookmark?): String = with(StringBuilder()) {
+        append("Barcode of type url\n")
         url?.let {
-            sb.append("Title: ${it.title}")
-            sb.append("Url: ${it.url}")
+            append("Title: ${it.title}\n")
+            append("Url: ${it.url}\n")
         }
+        toString()
     }
 
     override fun onDetectionFailure(exception: Exception): String {
-        return "Failed to read barcode\nCause: ${exception.message}"
+        return ERROR_MESSAGE + exception.message
+    }
+
+    companion object {
+        private const val RESULT_TITLE = "Barcode detection results\n\n"
+
+        private const val EMPTY_RESULT_MESSAGE = "Failed to detect barcodes in the provided image."
+
+        private const val ERROR_MESSAGE = "An error occurred while trying to detect barcodes in the provided image.\n\nCause: "
     }
 }

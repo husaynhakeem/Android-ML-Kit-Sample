@@ -3,4 +3,7 @@
 
     <dimen name="user_option_imageview_size">70dp</dimen>
     <dimen name="user_option_container_padding">16dp</dimen>
+
+    <dimen name="results_textview_start_end_padding">12dp</dimen>
+    <dimen name="results_textview_top_bottom_padding">24dp</dimen>
 </resources>

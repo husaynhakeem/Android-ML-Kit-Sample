@@ -3,6 +3,7 @@ package io.husaynhakeem.mlkit_sample.ui
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -24,11 +25,29 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUpViewModel()
+        setUpUI()
     }
 
     private fun setUpViewModel() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.view = this
+    }
+
+    private fun setUpUI() {
+        resultTextView.setOnClickListener {
+            userOptionsRecyclerView.visibility =
+                    if (userOptionsRecyclerView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            val image = ImagePicker.getFirstImageOrNull(data)
+            if (image != null) {
+                viewModel.imagePath = image.path
+            }
+        }
     }
 
     //======================================================
@@ -45,16 +64,6 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
 
     override fun showImagePicker() {
         ImagePickerDialog().show(supportFragmentManager, ImagePickerDialog::class.java.simpleName)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            val image = ImagePicker.getFirstImageOrNull(data)
-            if (image != null) {
-                viewModel.imagePath = image.path
-            }
-        }
     }
 
     override fun showSelectedImage(imagePath: String) {
@@ -77,6 +86,14 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
             arguments = bundle
             show(supportFragmentManager, MLKitApiAboutDialog::class.java.simpleName)
         }
+    }
+
+    override fun showLoader() {
+        progressLoader.visibility = View.VISIBLE
+    }
+
+    override fun dismissLoader() {
+        progressLoader.visibility = View.GONE
     }
     //endregion
 

@@ -27,24 +27,38 @@ class MainViewModel : ViewModel() {
         }
 
     var mostRecentlyUsedMLKitApiOption = UserOptionsRepository.firstMLKitApiOption
+        set(value) {
+            field = value
+            showMLKitApiAboutDialog(field)
+            processImage(field)
+        }
+
+    private fun showMLKitApiAboutDialog(option: MLKitApiOption) {
+        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(option)) {
+            view?.showMLKitApiAboutDialog(option.iconResId, option.title, option.body)
+        }
+    }
+
+    private fun processImage(option: MLKitApiOption) {
+        if (option.isEnabled) {
+            view?.showLoader()
+            MLkitApiFactory.get(option.type).process(
+                    imagePath,
+                    {
+                        view?.dismissLoader()
+                        view?.printResult(it)
+                    },
+                    {
+                        view?.dismissLoader()
+                        view?.printError(it)
+                    })
+        }
+    }
 
     fun onUserOptionSelected(option: UserOption) {
         when (option) {
             is NewImageOption -> view?.showImagePicker()
-            is MLKitApiOption -> {
-                mostRecentlyUsedMLKitApiOption = option
-                showMLKitApiDefinition(option)
-                MLkitApiFactory.get(option.type).process(
-                        imagePath,
-                        { view?.printResult(it) },
-                        { view?.printError(it) })
-            }
-        }
-    }
-
-    private fun showMLKitApiDefinition(option: MLKitApiOption) {
-        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(option)) {
-            view?.showMLKitApiAboutDialog(option.iconResId, option.title, option.body)
+            is MLKitApiOption -> mostRecentlyUsedMLKitApiOption = option
         }
     }
 }

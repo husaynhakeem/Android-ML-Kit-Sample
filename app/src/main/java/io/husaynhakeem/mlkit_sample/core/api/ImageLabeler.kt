@@ -22,13 +22,26 @@ class ImageLabeler : MLKitApi<FirebaseVisionLabelDetector, List<FirebaseVisionLa
     override fun onDetectionSuccess(result: List<FirebaseVisionLabel>) = with(StringBuilder()) {
         result.forEach {
             val label = it.label
-            val confidenceProbability = it.confidence * 100
-            append("$label was detected in the image with a probability of $confidenceProbability")
+            val confidenceProbability = Math.round(it.confidence * 100)
+            append("- A $label was detected in the image with a probability of $confidenceProbability%\n")
         }
-        toString()
+
+        if (this.isBlank()) {
+            return RESULT_TITLE + EMPTY_RESULT_MESSAGE
+        }
+
+        RESULT_TITLE + toString()
     }
 
     override fun onDetectionFailure(exception: Exception): String {
-        return "Failed to detect objects in the image\nCause: ${exception.message}"
+        return ERROR_MESSAGE + exception.message
+    }
+
+    companion object {
+        private const val RESULT_TITLE = "Image labeling results\n\n"
+
+        private const val EMPTY_RESULT_MESSAGE = "Failed to label objects in the provided image."
+
+        private const val ERROR_MESSAGE = "An error occurred while trying to label objects in the provided image.\n\nCause: "
     }
 }

@@ -18,14 +18,23 @@
         android:layout_height="match_parent"
         android:background="@color/black_90" />
 
-    <TextView
-        android:id="@+id/resultTextView"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/ef_padding_medium"
-        android:textColor="@color/ef_white"
-        android:textSize="@dimen/ef_font_medium"
-        tools:text="Results" />
+        android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/results_textview_start_end_padding"
+            android:paddingTop="@dimen/results_textview_top_bottom_padding"
+            android:paddingEnd="@dimen/results_textview_start_end_padding"
+            android:paddingBottom="@dimen/results_textview_top_bottom_padding"
+            android:textColor="@color/ef_white"
+            android:textSize="@dimen/ef_font_medium"
+            tools:text="Results" />
+    </ScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userOptionsRecyclerView"
@@ -34,5 +43,12 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:scrollbars="none" />
+
+    <ProgressBar
+        android:id="@+id/progressLoader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </FrameLayout>

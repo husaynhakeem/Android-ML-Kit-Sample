@@ -38,7 +38,7 @@ object UserOptionsRepository {
                         R.string.landmark_detector_title,
                         R.string.landmark_detector_body,
                         LANDMARK_DETECTOR,
-                        true),
+                        false),
                 MLKitApiOption(
                         R.drawable.ic_text_detector,
                         R.string.text_detector_title,
