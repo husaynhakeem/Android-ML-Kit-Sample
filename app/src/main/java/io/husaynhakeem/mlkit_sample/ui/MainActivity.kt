@@ -141,6 +141,7 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
     override fun onGallerySelected() {
         ImagePicker.create(this)
                 .showCamera(false)
+                .theme(R.style.CameraPickerTheme)
                 .start()
     }
     //endregion
