@@ -25,4 +25,7 @@
 
     <string name="text_detector_title">Text Detector</string>
     <string name="text_detector_body">With ML Kit\'s text recognition APIs, you can recognize text in any Latin-based language (and more, with Cloud-based text recognition).</string>
+
+    <string name="menu_github">Github</string>
+    <string name="github_profile_url">https://github.com/husaynhakeem</string>
 </resources>

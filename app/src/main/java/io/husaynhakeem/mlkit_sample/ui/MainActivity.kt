@@ -2,7 +2,10 @@ package io.husaynhakeem.mlkit_sample.ui
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -147,6 +150,30 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
     //======================================================
     override fun onDismissed() {
         viewModel.onMLKitAboutDialogDismissed()
+    }
+    //endregion
+
+    //======================================================
+    //region Menu
+    //======================================================
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menuItemGithub -> {
+                openGithubProfile()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun openGithubProfile() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_profile_url)))
+        startActivity(intent)
     }
     //endregion
 }
