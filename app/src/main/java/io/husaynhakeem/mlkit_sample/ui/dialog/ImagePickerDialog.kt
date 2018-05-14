@@ -32,6 +32,10 @@ class ImagePickerDialog : DialogFragment() {
                 .create()
     }
 
+    companion object {
+        val TAG = ImagePickerDialog::class.java.simpleName
+    }
+
     interface Listener {
         fun onCameraSelected()
         fun onGallerySelected()

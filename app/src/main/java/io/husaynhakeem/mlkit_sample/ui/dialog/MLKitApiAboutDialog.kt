@@ -30,6 +30,7 @@ class MLKitApiAboutDialog : DialogFragment() {
     }
 
     companion object {
+        val TAG = MLKitApiAboutDialog::class.java.simpleName
         const val KEY_TITLE = "key_title"
         const val KEY_BODY = "key_body"
     }

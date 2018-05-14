@@ -51,9 +51,11 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
     }
 
     private fun showImagePicker(isCancelable: Boolean) {
-        val imagePickerDialog = ImagePickerDialog()
-        imagePickerDialog.isCancelable = isCancelable
-        imagePickerDialog.show(supportFragmentManager, ImagePickerDialog::class.java.simpleName)
+        if (supportFragmentManager.findFragmentByTag(ImagePickerDialog.TAG) == null) {
+            val imagePickerDialog = ImagePickerDialog()
+            imagePickerDialog.isCancelable = isCancelable
+            imagePickerDialog.show(supportFragmentManager, ImagePickerDialog.TAG)
+        }
     }
 
     private fun observeUserOptionsChanges() {
@@ -85,15 +87,19 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
 
     private fun observeDisplayableAboutDialogChanges() {
         viewModel.displayableAboutDialog.observe(this, Observer {
-            it?.let {
-                val dialog = MLKitApiAboutDialog()
-                val bundle = Bundle()
-                bundle.putInt(MLKitApiAboutDialog.KEY_TITLE, it.title)
-                bundle.putInt(MLKitApiAboutDialog.KEY_BODY, it.body)
-                dialog.arguments = bundle
-                dialog.show(supportFragmentManager, MLKitApiAboutDialog::class.java.simpleName)
-            }
+            it?.let { showMLKitAboutDialog(it) }
         })
+    }
+
+    private fun showMLKitAboutDialog(option: MLKitApiOption) {
+        if (supportFragmentManager.findFragmentByTag(MLKitApiAboutDialog.TAG) == null) {
+            val dialog = MLKitApiAboutDialog()
+            val bundle = Bundle()
+            bundle.putInt(MLKitApiAboutDialog.KEY_TITLE, option.title)
+            bundle.putInt(MLKitApiAboutDialog.KEY_BODY, option.body)
+            dialog.arguments = bundle
+            dialog.show(supportFragmentManager, MLKitApiAboutDialog.TAG)
+        }
     }
 
     private fun observeLoadingStateChanges() {
