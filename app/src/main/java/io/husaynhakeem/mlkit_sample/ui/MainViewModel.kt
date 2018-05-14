@@ -1,88 +1,70 @@
 package io.husaynhakeem.mlkit_sample.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.husaynhakeem.mlkit_sample.core.api.MLkitApiFactory
 import io.husaynhakeem.mlkit_sample.core.model.MLKitApiOption
-import io.husaynhakeem.mlkit_sample.core.model.NewImageOption
 import io.husaynhakeem.mlkit_sample.core.model.UserOption
 
 class MainViewModel : ViewModel() {
 
-    var view: MainView? = null
-        set(value) {
-            field = value
-            field?.setUpUserOptionsList(UserOptionsRepository.options)
-            if (imagePath.isBlank()) {
-                field?.showImagePicker(false)
-            } else {
-                populateView(field)
-            }
-        }
-
-    var imagePath: String = ""
-        set(value) {
-            field = value
-            view?.showSelectedImage(imagePath)
-            onUserOptionSelected(mostRecentlyUsedMLKitApiOption)
-        }
-
-    var mostRecentlyUsedMLKitApiOption = UserOptionsRepository.firstMLKitApiOption
-        set(value) {
-            field = value
-            showMLKitApiAboutDialog(field)
-            processImage(field)
-        }
-
-    var latestResult: String = ""
-        set(value) {
-            field = value
-            if (field.isNotEmpty())
-                latestErrorMessage = ""
-        }
-
-    var latestErrorMessage: String = ""
-        set(value) {
-            field = value
-            if (field.isNotEmpty())
-                latestResult = ""
-        }
-
-    private fun populateView(view: MainView?) {
-        view?.showSelectedImage(imagePath)
-        if (latestResult.isNotEmpty())
-            view?.printResult(latestResult)
-        if (latestErrorMessage.isNotEmpty())
-            view?.printError(latestErrorMessage)
-    }
-
-    private fun showMLKitApiAboutDialog(option: MLKitApiOption) {
-        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(option)) {
-            view?.showMLKitApiAboutDialog(option.iconResId, option.title, option.body)
+    val userOptions: LiveData<Array<UserOption>> by lazy {
+        MutableLiveData<Array<UserOption>>().apply {
+            postValue(UserOptionsRepository.options)
         }
     }
 
-    private fun processImage(option: MLKitApiOption) {
-        if (option.isEnabled) {
-            view?.showLoader()
-            MLkitApiFactory.get(option.type).process(
-                    imagePath,
+    val latestImagePath: MutableLiveData<String> by lazy {
+        MutableLiveData<String>().apply {
+            value = ""
+        }
+    }
+
+    var latestResult: MutableLiveData<String> = MutableLiveData()
+
+    val latestErrorMessage: MutableLiveData<String> = MutableLiveData()
+
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData()
+
+    val displayableAboutDialog: MutableLiveData<MLKitApiOption?> = MutableLiveData()
+
+    private var latestMLKitApiOption = UserOptionsRepository.firstMLKitApiOption
+
+    fun onImageSelected(imagePath: String) {
+        latestImagePath.value = imagePath
+        processImage()
+    }
+
+    private fun processImage() {
+        if (latestMLKitApiOption.isEnabled) {
+            isLoading.value = true
+            MLkitApiFactory.get(latestMLKitApiOption.type).process(
+                    latestImagePath.value!!,
                     {
-                        latestResult = it
-                        view?.dismissLoader()
-                        view?.printResult(it)
+                        isLoading.value = false
+                        latestResult.value = it
                     },
                     {
-                        latestErrorMessage = it
-                        view?.dismissLoader()
-                        view?.printError(it)
+                        isLoading.value = false
+                        latestErrorMessage.value = it
                     })
         }
     }
 
-    fun onUserOptionSelected(option: UserOption) {
-        when (option) {
-            is NewImageOption -> view?.showImagePicker(true)
-            is MLKitApiOption -> mostRecentlyUsedMLKitApiOption = option
+    fun onMLKitApiOptionSelected(option: MLKitApiOption) {
+        latestMLKitApiOption = option
+        showMLKitApiAboutDialog()
+        processImage()
+    }
+
+    private fun showMLKitApiAboutDialog() {
+        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(latestMLKitApiOption)) {
+            displayableAboutDialog.postValue(latestMLKitApiOption)
         }
+    }
+
+    fun onMLKitAboutDialogDismissed() {
+        displayableAboutDialog.value = null
     }
 }
