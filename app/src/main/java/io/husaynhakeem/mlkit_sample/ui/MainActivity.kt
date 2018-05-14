@@ -62,8 +62,10 @@ class MainActivity : AppCompatActivity(), MainView, UserOptionViewHolder.Listene
         }
     }
 
-    override fun showImagePicker() {
-        ImagePickerDialog().show(supportFragmentManager, ImagePickerDialog::class.java.simpleName)
+    override fun showImagePicker(isCancelable: Boolean) {
+        val imagePickerDialog = ImagePickerDialog()
+        imagePickerDialog.isCancelable = isCancelable
+        imagePickerDialog.show(supportFragmentManager, ImagePickerDialog::class.java.simpleName)
     }
 
     override fun showSelectedImage(imagePath: String) {

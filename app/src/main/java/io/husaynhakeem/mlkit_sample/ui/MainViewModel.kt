@@ -13,7 +13,7 @@ class MainViewModel : ViewModel() {
             field = value
             field?.setUpUserOptionsList(UserOptionsRepository.options)
             if (imagePath.isBlank()) {
-                field?.showImagePicker()
+                field?.showImagePicker(false)
             } else {
                 populateView(field)
             }
@@ -81,7 +81,7 @@ class MainViewModel : ViewModel() {
 
     fun onUserOptionSelected(option: UserOption) {
         when (option) {
-            is NewImageOption -> view?.showImagePicker()
+            is NewImageOption -> view?.showImagePicker(true)
             is MLKitApiOption -> mostRecentlyUsedMLKitApiOption = option
         }
     }

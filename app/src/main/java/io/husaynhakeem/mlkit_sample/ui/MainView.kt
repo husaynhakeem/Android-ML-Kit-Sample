@@ -8,7 +8,7 @@ interface MainView {
 
     fun setUpUserOptionsList(options: Array<UserOption>)
 
-    fun showImagePicker()
+    fun showImagePicker(isCancelable: Boolean)
 
     fun printResult(result: String)
 
