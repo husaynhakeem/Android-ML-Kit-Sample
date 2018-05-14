@@ -36,13 +36,13 @@ class FaceDetector : MLKitApi<FirebaseVisionFaceDetector, List<FirebaseVisionFac
             append("Head is tilted sideways $rotZ degrees\n")
 
             val smilingProbability = Math.round(it.smilingProbability * 100)
-            append("Smiling probability $smilingProbability\n")
+            append("Smiling probability $smilingProbability%\n")
 
             val rightEyeOpenProbability = Math.round(it.rightEyeOpenProbability * 100)
-            append("Right eye open probablity $rightEyeOpenProbability\n")
+            append("Right eye open probablity $rightEyeOpenProbability%\n")
 
             val leftEyeOpenProbability = Math.round(it.leftEyeOpenProbability * 100)
-            append("Left eye open probablity $leftEyeOpenProbability\n")
+            append("Left eye open probablity $leftEyeOpenProbability%\n")
 
             val rightEar = it.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EAR)
             val leftEar = it.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR)
