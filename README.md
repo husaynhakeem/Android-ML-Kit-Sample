@@ -3,7 +3,7 @@
 This is a sample Android application I built in order to practice [Firebase's Machine learning kit](https://firebase.google.com/products/ml-kit/) (Firebase ML Kit).
 
 ## Related articles
-After building this project, I wrote 2 articles about Firebase's ML Kit, [the first]() is more or an introduction to the topic, while [the second]() deals more specifically with using ML Kit's APIs in this application, and technologies/design patterns it uses in general.
+After building this project, I wrote 2 articles about Firebase's ML Kit, [the first](https://proandroiddev.com/firebase-machine-learning-kit-101-738baea0253f) is more or an introduction to the topic, while [the second]() deals more specifically with using ML Kit's APIs in this application, and technologies/design patterns it uses in general.
 
 
 ## Libraries used in this project
