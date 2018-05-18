@@ -1,4 +1,4 @@
-package io.husaynhakeem.mlkit_sample.ui.useroptions
+package io.husaynhakeem.mlkit_sample.ui.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

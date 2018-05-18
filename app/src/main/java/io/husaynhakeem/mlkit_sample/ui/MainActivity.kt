@@ -19,7 +19,7 @@ import io.husaynhakeem.mlkit_sample.core.model.UserOption
 import io.husaynhakeem.mlkit_sample.core.ui.CenteredHorizontalLayoutManager
 import io.husaynhakeem.mlkit_sample.ui.dialog.ImagePickerDialog
 import io.husaynhakeem.mlkit_sample.ui.dialog.MLKitApiAboutDialog
-import io.husaynhakeem.mlkit_sample.ui.useroptions.UserOptionsAdapter
+import io.husaynhakeem.mlkit_sample.ui.recycler.UserOptionsAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAboutDialog.Listener {
@@ -35,22 +35,40 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
 
     private fun setUpViewModel() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        observeSelectedImageChanges()
-        observeUserOptionsChanges()
-        observeResultChanges()
-        observeErrorMessageChanges()
-        observeLoadingStateChanges()
-        observeDisplayableAboutDialogChanges()
+        viewModel.viewState.observe(this, Observer {
+            if (it == null) {
+                return@Observer
+            }
+            renderUserOptions(it.userOptions)
+            renderLoading(it.isLoading)
+            renderSelectedImage(it.imagePath)
+            renderResult(it.result)
+            renderError(it.error)
+            renderMLKitApiAboutDialog(it.displayAboutDialog, it.mlKitApiOption)
+        })
     }
 
-    private fun observeSelectedImageChanges() {
-        viewModel.latestImagePath.observe(this, Observer {
-            if (it.isNullOrBlank()) {
-                showImagePicker(false)
-            } else {
-                selectedImageImageView.setImageBitmap(BitmapFactory.decodeFile(it))
-            }
-        })
+    //======================================================
+    //region UI rendering
+    //======================================================
+    private fun renderUserOptions(options: Array<UserOption>) {
+        if (userOptionsRecyclerView.adapter == null) {
+            userOptionsRecyclerView.layoutManager = CenteredHorizontalLayoutManager(this@MainActivity)
+            LinearSnapHelper().attachToRecyclerView(userOptionsRecyclerView)
+            userOptionsRecyclerView.adapter = UserOptionsAdapter(options, { onUserOptionClicked(it) })
+        }
+    }
+
+    private fun renderLoading(isLoading: Boolean) {
+        progressLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun renderSelectedImage(imagePath: String) {
+        if (imagePath.isBlank()) {
+            showImagePicker(false)
+        } else {
+            selectedImageImageView.setImageBitmap(BitmapFactory.decodeFile(imagePath))
+        }
     }
 
     private fun showImagePicker(isCancelable: Boolean) {
@@ -61,14 +79,6 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
         }
     }
 
-    private fun observeUserOptionsChanges() {
-        viewModel.userOptions.observe(this, Observer {
-            userOptionsRecyclerView.layoutManager = CenteredHorizontalLayoutManager(this@MainActivity)
-            LinearSnapHelper().attachToRecyclerView(userOptionsRecyclerView)
-            userOptionsRecyclerView.adapter = UserOptionsAdapter(it!!, { onUserOptionClicked(it) })
-        })
-    }
-
     private fun onUserOptionClicked(userOption: UserOption) {
         when (userOption) {
             is NewImageOption -> showImagePicker(true)
@@ -76,22 +86,19 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
         }
     }
 
-    private fun observeResultChanges() {
-        viewModel.latestResult.observe(this, Observer {
-            resultTextView.text = it
-        })
+    private fun renderResult(result: String) {
+        if (result.isNotBlank())
+            resultTextView.text = result
     }
 
-    private fun observeErrorMessageChanges() {
-        viewModel.latestErrorMessage.observe(this, Observer {
-            resultTextView.text = it
-        })
+    private fun renderError(error: String) {
+        if (error.isNotBlank())
+            resultTextView.text = error
     }
 
-    private fun observeDisplayableAboutDialogChanges() {
-        viewModel.displayableAboutDialog.observe(this, Observer {
-            it?.let { showMLKitAboutDialog(it) }
-        })
+    private fun renderMLKitApiAboutDialog(displayAboutDialog: Boolean, option: MLKitApiOption) {
+        if (displayAboutDialog)
+            showMLKitAboutDialog(option)
     }
 
     private fun showMLKitAboutDialog(option: MLKitApiOption) {
@@ -104,15 +111,7 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
             dialog.show(supportFragmentManager, MLKitApiAboutDialog.TAG)
         }
     }
-
-    private fun observeLoadingStateChanges() {
-        viewModel.isLoading.observe(this, Observer {
-            it?.let {
-                progressLoader.visibility = if (it) View.VISIBLE else View.GONE
-            }
-        })
-    }
-
+    //endregion
 
     private fun setupBackgroundClickListener() {
         resultTextView.setOnClickListener {
@@ -163,7 +162,7 @@ class MainActivity : AppCompatActivity(), ImagePickerDialog.Listener, MLKitApiAb
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.menuItemGithub -> {
                 openGithubProfile()
                 true

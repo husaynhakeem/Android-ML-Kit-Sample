@@ -1,70 +1,54 @@
 package io.husaynhakeem.mlkit_sample.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.husaynhakeem.mlkit_sample.core.api.MLkitApiFactory
 import io.husaynhakeem.mlkit_sample.core.model.MLKitApiOption
-import io.husaynhakeem.mlkit_sample.core.model.UserOption
+import io.husaynhakeem.mlkit_sample.ui.usecase.DisplayMLKitAboutDialogUseCase
 
 class MainViewModel : ViewModel() {
 
-    val userOptions: LiveData<Array<UserOption>> by lazy {
-        MutableLiveData<Array<UserOption>>().apply {
-            postValue(UserOptionsRepository.options)
+    val viewState: MutableLiveData<MainViewState> by lazy {
+        MutableLiveData<MainViewState>().apply {
+            value = MainViewState()
         }
     }
-
-    val latestImagePath: MutableLiveData<String> by lazy {
-        MutableLiveData<String>().apply {
-            value = ""
-        }
-    }
-
-    var latestResult: MutableLiveData<String> = MutableLiveData()
-
-    val latestErrorMessage: MutableLiveData<String> = MutableLiveData()
-
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData()
-
-    val displayableAboutDialog: MutableLiveData<MLKitApiOption?> = MutableLiveData()
-
-    private var latestMLKitApiOption = UserOptionsRepository.firstMLKitApiOption
 
     fun onImageSelected(imagePath: String) {
-        latestImagePath.value = imagePath
+        viewState.value = viewState.value?.copy(imagePath = imagePath)
         processImage()
     }
 
     private fun processImage() {
-        if (latestMLKitApiOption.isEnabled) {
-            isLoading.value = true
-            MLkitApiFactory.get(latestMLKitApiOption.type).process(
-                    latestImagePath.value!!,
-                    {
-                        isLoading.value = false
-                        latestResult.value = it
-                    },
-                    {
-                        isLoading.value = false
-                        latestErrorMessage.value = it
-                    })
+        viewState.value?.let {
+            processImageWithMLKitApiOption(it.imagePath, it.mlKitApiOption)
         }
     }
 
+    private fun processImageWithMLKitApiOption(image: String, mlKitApiOption: MLKitApiOption) {
+        if (!mlKitApiOption.isEnabled) {
+            return
+        }
+        viewState.value = viewState.value?.copy(isLoading = true)
+        MLkitApiFactory.get(mlKitApiOption.type).process(
+                image,
+                { viewState.value = viewState.value?.copy(isLoading = false, result = it, error = "") },
+                { viewState.value = viewState.value?.copy(isLoading = false, result = "", error = it) })
+    }
+
     fun onMLKitApiOptionSelected(option: MLKitApiOption) {
-        latestMLKitApiOption = option
-        showMLKitApiAboutDialog()
+        viewState.value?.mlKitApiOption = option
+        showAboutDialogForMLKitApi(option)
         processImage()
     }
 
-    private fun showMLKitApiAboutDialog() {
-        if (AboutMLKitApisHandler.shouldShowAboutDialogFor(latestMLKitApiOption)) {
-            displayableAboutDialog.postValue(latestMLKitApiOption)
+    private fun showAboutDialogForMLKitApi(option: MLKitApiOption) {
+        if (DisplayMLKitAboutDialogUseCase.shouldShowAboutDialogFor(option)) {
+            viewState.value = viewState.value?.copy(displayAboutDialog = true)
         }
     }
 
     fun onMLKitAboutDialogDismissed() {
-        displayableAboutDialog.value = null
+        viewState.value = viewState.value?.copy(displayAboutDialog = false)
     }
 }

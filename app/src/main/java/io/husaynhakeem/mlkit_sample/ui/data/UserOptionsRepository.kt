@@ -1,4 +1,4 @@
-package io.husaynhakeem.mlkit_sample.ui
+package io.husaynhakeem.mlkit_sample.ui.data
 
 import io.husaynhakeem.mlkit_sample.R
 import io.husaynhakeem.mlkit_sample.core.model.MLKitApiOption
